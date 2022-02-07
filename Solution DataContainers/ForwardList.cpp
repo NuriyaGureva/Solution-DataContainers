@@ -87,36 +87,42 @@ public:
 
 	void push_front(int Data)
 	{
-		Element* New = new Element(Data);//Создаем новый элемент и помещаем его Data
-		New->pNext = Head;//Привязываем новый элемент к началу списка
-		Head = New;//Переводим Голову на новый элемент
+		//Element* New = new Element(Data);//Создаем новый элемент и помещаем его Data
+		//New->pNext = Head;//Привязываем новый элемент к началу списка
+		//Head = New;//Переводим Голову на новый элемент
+		//size++;
+		Head = new Element(Data, Head);//Заполняем pNext через конструктоктор
 		size++;
-	}
 
+	}
+	
 	void push_back(int Data)
 	{
 		if (Head == nullptr)return push_front(Data);
 		//Создает новый элемент
-		Element* New = new Element(Data);
+		//Element* New = new Element(Data);
 		//доходим до конца списка
 		Element* Temp = Head;
 		while (Temp->pNext)//Пока,pNext текущего элемента
 		Temp = Temp->pNext;//переходим на следующий элемент
 		//Теперь мы находимся в последнем элементе
 		//Присоединяем новый элемент к последнему
-		Temp->pNext = New;
+		//Temp->pNext = New;
+		Temp->pNext = new Element(Data);
 		size++;
 	}
 	void insert(int index, int Data)
 	{		
 		if (index==0 || Head == nullptr) return push_front(Data);
 		if (index > size )return;
-		Element* New = new Element(Data);
+		//Element* New = new Element(Data);
 		Element* Temp = Head;
 		for (int i = 0; i < index - 1; i++)
 		Temp = Temp->pNext;
-		New->pNext = Temp->pNext;
-		Temp->pNext = New;
+		//New->pNext = Temp->pNext;
+		//Temp->pNext = New;
+		Temp->pNext = new Element(Data, Temp->pNext);
+
 		size++;
 	}
 	//void erase(int index)
@@ -239,10 +245,10 @@ public:
 		cout << "Общее элементов списка:" << Head->count << endl;
 	}
 };
- //#define BASE_CHECK
+ #define BASE_CHECK
 //#define DESTRUCTOR_CHECK
 //#define HOME_WORK_1
-#define HOME_WORK_2
+//#define HOME_WORK_2
 
 void main()
 {
@@ -259,20 +265,21 @@ void main()
 		//list.push_back(rand() % 100);
 
 	}
-	list.push_back(1);
+	/*list.push_back(1);
 	list.push_back(1);
 	list.push_back(2);
 	list.push_back(2);
-	list.push_back(3);
+	list.push_back(3);*/
 
-	list.print();
 	list.push_back(123);
-	list.pop_front();
-	list.pop_back();
+	list.print();
+	//list.pop_front();
+	//list.print();
+	//list.pop_back();
 	int index;
 	int value;
 	
-	/*cout << " Введите индекс добавляемого элемента:";
+	cout << " Введите индекс добавляемого элемента:";
 	cin >> index;
 	cout << " Введите значение добавляемого элемента:";
 	cin >> value;
@@ -281,7 +288,7 @@ void main()
 	cout << "Введите индекс удаляемого элемента:";
 	cin >> index;
 	list.erase(index);
-	list.print();	*/
+	list.print();	
 	cout << "Обратный список:" << endl;	
 	list.reverse();
 	list.print();	
