@@ -34,15 +34,55 @@ class  ForwardList//Односвязный список
 public:
 	ForwardList()
 	{
-		Head = nullptr;//усли голова указывает на 0,то список пустс
+		Head = nullptr;//если голова указывает на 0,то список пустс
 		size = 0;
 		cout << "LConstructor:\t"<< this << endl;
 	}
-	
+
+	ForwardList(unsigned int size):ForwardList()
+	{
+		//this->Head = nullptr;
+		//this->size = 0;
+		for (int i = 0; i < size; i++)
+		{
+			push_front(0);
+		}
+
+	}
+	ForwardList(const initializer_list<int>& il) :ForwardList()
+	{
+		//il.begin()- возвращает итератор на начало контейнера
+		//il.end()- возвращает итератор на конец контейнера
+		//cout << typeid(il.begin()).name() << endl;
+		//const int* константный указатель( не изменяется адрес)
+		// int const* - указатель на константу(не изменяется значение по адресу)
+		//for (int const* it = il.begin(); it != il.end(); it++)
+		//{
+		//	//it-iterator
+		//	push_back(*it);
+		//}
+		for (int const* it = il.end() - 1; it != il.begin() - 1; it--)
+		{
+			push_front(*it);
+		}
+	}
 	~ForwardList()
 	{
 		while (Head)pop_front();		
 		cout << "LDestructor:\t" << this << endl;
+	}
+	    //      Operators:
+	const int& operator[]( int index)const
+	{
+		Element* Temp = Head;
+		for (int i = 0; i < index; i++) Temp = Temp->pNext;
+		return Temp->Data;
+	}
+	int& operator[](int index)
+	{
+		Element* Temp = Head;
+		for (int i = 0; i < index; i++) Temp = Temp->pNext;
+		return Temp->Data;
 	}
 
 	void push_front(int Data)
@@ -199,10 +239,10 @@ public:
 		cout << "Общее элементов списка:" << Head->count << endl;
 	}
 };
- #define BASE_CHECK
+ //#define BASE_CHECK
 //#define DESTRUCTOR_CHECK
 //#define HOME_WORK_1
-//#define HOME_WORK_2
+#define HOME_WORK_2
 
 void main()
 {
@@ -210,15 +250,15 @@ void main()
 
 #ifdef   BASE_CHECK
 	int n;
-	//cout << "Введите размер списка: "; cin >> n;
+	cout << "Введите размер списка: "; cin >> n;
 	ForwardList list;
-	//list.pop_front
-	//for (int i = 0; i < n; i++)
-	//{
-	//	//list.push_front(rand() % 100);
-	//	//list.push_back(rand() % 100);
+	list.pop_front();
+	for (int i = 0; i < n; i++)
+	{
+		list.push_front(rand() % 100);
+		//list.push_back(rand() % 100);
 
-	//}
+	}
 	list.push_back(1);
 	list.push_back(1);
 	list.push_back(2);
@@ -226,9 +266,9 @@ void main()
 	list.push_back(3);
 
 	list.print();
-	//list.push_back(123);
-	//list.pop_front();
-	//list.pop_back();
+	list.push_back(123);
+	list.pop_front();
+	list.pop_back();
 	int index;
 	int value;
 	
@@ -294,8 +334,9 @@ cout << endl;
 #endif // HOME_WORK_1
 
 #ifdef HOME_WORK_2
-
+// l-value=r-value
 	ForwardList list = { 3,5,8,13,21 };
+	// (ForwardList)= (initializer_list)
 	list.print();
 #endif // HOME_WORK_2
 }
