@@ -1,6 +1,7 @@
 #include <iostream>
+#include<list>
+#include<iterator>
 using namespace std;
-
 #define tab "\t"
 
 class Element
@@ -22,8 +23,50 @@ public:
 		cout << "EDestrcutor:\t" << this << endl;
 	}
 	friend class ForwardList;
+	friend class Iterator;
 };
+class Iterator
+{
+	Element* Temp;
+public:
+	Iterator(Element* Temp = nullptr) :Temp(Temp)
+	{
+		cout << "ItConstructor:\t" << this << endl;
+	}
+	~Iterator()
+	{
+		cout << "ItDeconstructor:\t" << this << endl;
+	}
 
+	Iterator& operator++()// Prefex increment
+	{
+		Temp = Temp->pNext;
+		return *this;
+	}
+	Iterator operator++(int)//Posfix increment
+	{
+		Iterator old = *this;// Сохраняем старое значение итератора
+		Temp = Temp->pNext;//Изменяем итератор
+		return old;// Возвращаем старое значение
+	}
+	bool operator==(const Iterator& other)const
+	{
+		return this->Temp == other.Temp;
+	}
+	bool operator!=(const Iterator& other)const
+	{
+		return this->Temp != other.Temp;
+	}
+	int& operator*()
+	{
+		return Temp->Data;
+	}
+	const int& operator*()const
+	{
+		return Temp->Data;
+	}
+
+};
 int Element::count = 0;
 
 class  ForwardList//Односвязный список
@@ -32,6 +75,18 @@ class  ForwardList//Односвязный список
 
 	unsigned int size;
 public:
+	Element* getHead()const
+	{
+		return Head;
+	}
+	Iterator begin()
+	{
+		return Head;
+	}
+	Iterator end()
+	{
+		return nullptr;
+	}
 	ForwardList()
 	{
 		Head = nullptr;//если голова указывает на 0,то список пустс
@@ -175,6 +230,7 @@ public:
 		delete Erased;
 		size--;
 	}
+
 	void pop_back()
 	{
 		if (Head == nullptr)return;
@@ -188,6 +244,7 @@ public:
 		Temp->pNext = nullptr;
 		size--;
 	}
+
 
 	void reverse()//Список наоборот
 	{	
@@ -220,35 +277,44 @@ public:
 					prev = elem;
 					elem = elem->pNext;
 				}
-				else 				{
-					
+				else 				
+				{					
 					prev->pNext = elem->pNext;
 					delete elem;
 					elem = prev->pNext;
 				}
 			}
-
 			current = current->pNext;
 		}				
 	}
+	
 	void print()const
 	{
+#ifdef OLD_PRINT
 		Element* Temp = Head;//temp-это итератор
-		//Итератор- это указатель,при помощи которого можно получить доступ
-		//к элементам структуры данных.
+//Итератор- это указатель,при помощи которого можно получить доступ
+//к элементам структуры данных.
 		while (Temp)//Пока Интератор содержит ненулевой адрес
 		{
 			cout << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
 			Temp = Temp->pNext;
 		}
+#endif // OLD_PRINT
+
+     for (Element*Temp=Head; Temp;Temp=Temp->pNext)
+     //for (Element* Temp = Head; Temp; Temp++)
+        cout << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
 		cout << " Количество элементов списка:" << size << endl;
 		cout << "Общее элементов списка:" << Head->count << endl;
 	}
 };
- #define BASE_CHECK
+
+ //#define BASE_CHECK
 //#define DESTRUCTOR_CHECK
 //#define HOME_WORK_1
 //#define HOME_WORK_2
+ //#define RANGE_BESE_FOR_ARRAY
+
 
 void main()
 {
@@ -344,8 +410,39 @@ cout << endl;
 // l-value=r-value
 	ForwardList list = { 3,5,8,13,21 };
 	// (ForwardList)= (initializer_list)
-	list.print();
+	//list.print();
+	for (Iterator it = list.getHead(); it != nullptr; ++it)
+	{
+		cout << *it << tab;
+	}
+	cout << endl;
 #endif // HOME_WORK_2
+
+#ifdef RANGE_BESE_FOR_ARRAY
+	int arr[] = { 3,5,8,13,21 };
+	//for (int i = 0; i < sizeof(arr) / sizeof(int); i++)
+	//{
+	//	cout << arr[i] << tab;
+	//}
+	//cout << endl;
+
+	// rand-based for(for для диапазона)
+	for (int i : arr)
+	{
+		cout << i << tab;
+	}
+	cout << endl;
+	// Под диапозонам понимается контейнер(массив, список и т.д)	 
+	//  других языках программирования это называют foreach
+
+#endif // RANGE_BESE_FOR_ARRAY
+
+	ForwardList list = { 3,5,8,13,21 };
+		for ( int i:list)
+	    {
+			cout << i << tab ;
+	    }
+	cout << endl;
 }
 
 
