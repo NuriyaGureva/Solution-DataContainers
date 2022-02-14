@@ -309,7 +309,7 @@ public:
 	}
 };
 
- //#define BASE_CHECK
+ #define BASE_CHECK
 //#define DESTRUCTOR_CHECK
 //#define HOME_WORK_1
 //#define HOME_WORK_2
