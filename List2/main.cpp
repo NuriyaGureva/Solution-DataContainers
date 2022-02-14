@@ -114,8 +114,7 @@ public:
 	void erase(int index)
 {
 	if (index > size)return;
-	if (index == 0)return pop_front();
-	if (Head == nullptr)return;
+	if (index == 0||Head==nullptr )return pop_front();	
 	Element* Temp = Head;
 	Element* pPrev = nullptr;
 
