@@ -112,8 +112,7 @@ public:
 		size++;
 	}
 	void erase(int index)
-{
-	if (index > size)return;
+	{	
 	if (index == 0||Head==nullptr )return pop_front();	
 	Element* Temp = Head;
 	Element* pPrev = nullptr;
@@ -122,12 +121,10 @@ public:
 		pPrev = Temp;
 		Temp = Temp->pNext;
 	}
-
 	if (pPrev != nullptr) 
 	{
 		pPrev->pNext =Temp->pNext;
 	}
-
 	delete Temp;
 	size--;
 }
