@@ -79,11 +79,17 @@ public:
 	void pop_back()
 	{
 		if (Tail == nullptr)return;		
-		Element* Temp = Tail;
+		/*Element* Temp = Tail;
 		while (Temp->pNext->pNext)Temp = Temp->pNext;		
 		delete Temp->pNext;		
 		Temp->pNext = nullptr;
+		size--;*/
+		Element* Temp = Tail;
+	    Tail= Temp->pNext;
+		delete Temp->pNext;
+		Temp->pNext = nullptr;
 		size--;
+
 	}
 	void pop_front() 
 	{
@@ -101,7 +107,6 @@ public:
 		for (int i = 0; i < index - 1; i++)
 		Temp = Temp->pNext;	
 		Temp->pNext = new Element(Data, Temp->pNext);
-
 		size++;
 	}
 	void erase(int index)
