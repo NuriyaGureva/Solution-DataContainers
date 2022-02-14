@@ -78,12 +78,14 @@ public:
 	}
 	void pop_back()
 	{
-		if (Tail == nullptr)return;		
-		/*Element* Temp = Tail;
+		/*if (Tail == nullptr)return;		
+		Element* Temp = Tail;
 		while (Temp->pNext->pNext)Temp = Temp->pNext;		
 		delete Temp->pNext;		
 		Temp->pNext = nullptr;
 		size--;*/
+
+		if (Tail == nullptr)return;
 		Element* Temp = Tail;
 	    Tail= Temp->pNext;
 		delete Temp->pNext;
