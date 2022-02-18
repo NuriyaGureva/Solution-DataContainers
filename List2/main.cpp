@@ -316,11 +316,11 @@ public:
 	}
 	void erase(int index)
 	{	
-	if (index == 0||Head==nullptr||Tail==nullptr )return;	
+	if (index == 0||Head==nullptr)return;	
 	Element* Temp = Head;
 	Element* pPrev = nullptr;
 
-	for (int i = 0; i < index; i++)
+	for (int i = 0; i < index-1; i++)
 	{
 		pPrev = Temp;
 		Temp = Temp->pNext;
@@ -332,6 +332,8 @@ public:
 	  delete Temp;
 	  size--;
     }
+
+	
 };
 
 //#define BASE_CHECK
@@ -350,7 +352,7 @@ void main()
 		list.push_front(rand() % 100);
 		//list.push_back(rand() % 100);
 	}
-	list.print();
+/*	list.print();
 	list.revers_print();
 	list.push_front(100);
 	list.print();
@@ -359,7 +361,7 @@ void main()
 	list.pop_back();
 	list.print();
 	list.pop_front();
-	list.print();	
+	list.print();*/	
 
 	int index;
 	int value;
@@ -369,12 +371,12 @@ void main()
 	cin >> value;
 	list.insert(index, value);
 	list.print();
-	list.revers_print();
+	//list.revers_print();
 	cout << "Введите индекс удаляемого элемента:";
 	cin >> index;
 	list.erase(index);
 	list.print();
-	list.revers_print();
+	//list.revers_print();
 
 #endif // BASE_CHECK
 
