@@ -225,10 +225,10 @@ public:
 		   return;
 		}
 	Element* New = new Element(Data);
-	//New->pNext = Head;
-	//Head->pPrev = New;
-	//Head = New;
-	Head = Head->pPrev = new Element(Data, Head);
+	New->pNext = Head;
+	Head->pPrev = New;
+	Head = New;
+	//Head = Head->pPrev = new Element(Data, Head);
 	size++;
 	}
 	void push_back(int Data)
@@ -315,28 +315,28 @@ public:
 		size--;
 	}
 	void erase(int index)
-	{	
-	if (index == 0||Head==nullptr)return;	
-	Element* Temp = Head;
-	Element* pPrev = nullptr;
-
-	for (int i = 0; i < index-1; i++)
 	{
-		pPrev = Temp;
-		Temp = Temp->pNext;
-	}
-	if (pPrev != nullptr) 
-	{
-		pPrev->pNext =Temp->pNext;
-	}
-	  delete Temp;
-	  size--;
-    }
+		if (index == 0 || Head == nullptr) return;
+	
+		Element* Temp = Head;
+		for (int i = 0; i < index; i++)
+		{
+			Temp = Temp->pNext;
+		}
 
+		Element* Prev = Temp->pPrev;
+		Element* Next = Temp->pNext;
+
+		Prev->pNext = Next;
+		Next->pPrev = Prev;
+
+		delete Temp;
+		size--;
+	}
 	
 };
 
-//#define BASE_CHECK
+#define BASE_CHECK
 
 void main()
 {
@@ -380,16 +380,16 @@ void main()
 
 #endif // BASE_CHECK
 
-	List list = { 3,5,8,13,21 };
-	list.print();
-	for (int i : list)
-	{
-		cout << i << tab;
-	}
-	cout << endl;
-	for (List::ReversIterator it = list.rbegin(); it; ++it)
-	{
-		cout << *it << tab;
-	}
-	cout << endl;
+	//List list = { 3,5,8,13,21 };
+	//list.print();
+	//for (int i : list)
+	//{
+	//	cout << i << tab;
+	//}
+	//cout << endl;
+	//for (List::ReversIterator it = list.rbegin(); it; ++it)
+	//{
+	//	cout << *it << tab;
+	//}
+	//cout << endl;
 }
