@@ -319,7 +319,8 @@ public:
 		if (index == 0 || Head == nullptr) return;
 	
 		Element* Temp = Head;
-		for (int i = 0; i < index; i++)
+		Element* pPev = nullptr;
+		for (int i = 0; i<index; i++)
 		{
 			Temp = Temp->pNext;
 		}
