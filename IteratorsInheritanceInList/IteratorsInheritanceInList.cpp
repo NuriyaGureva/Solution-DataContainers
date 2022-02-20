@@ -312,20 +312,6 @@ public:
 		while (Tail)pop_back();
 		cout << "LDestructor:\t" << this << endl;
 	}
-	//const int& operator[](int index)const
-	//{
-	//	Element* Temp = Head;
-	//
-	//	for (int i = 0; i < index; i++) Temp = Temp->pNext;
-	//	return Temp->Data;
-	//}
-	//int& operator[](int index)
-	//{
-	//	Element* Temp = Head;
-	//	for (int i = 0; i < index; i++) Temp = Temp->pNext;
-	//	return Temp->Data;
-	//}
-		 //Adding elements:
 
 		//          Methods:
 	void print()const
@@ -348,11 +334,11 @@ public:
 			size++;
 			return;
 		}
-		Element* New = new Element(Data);
-		New->pNext = Head;
-		Head->pPrev = New;
-		Head = New;
-		//Head = Head->pPrev = new Element(Data, Head);
+		//Element* New = new Element(Data);
+		//New->pNext = Head;
+		//Head->pPrev = New;
+		//Head = New;
+		Head = Head->pPrev = new Element(Data, Head);
 		size++;
 	}
 	void push_back(int Data)
@@ -369,10 +355,11 @@ public:
 			size++;
 			return;
 		}
-		Element* New = new Element(Data);
+	/*	Element* New = new Element(Data);
 		New->pPrev = Tail;
 		Tail->pNext = New;
-		Tail = New;
+		Tail = New;*/
+		Tail = Tail->pNext = new Element(Data, nullptr, Tail);
 		size++;
 
 	}
@@ -399,11 +386,12 @@ public:
 			Temp = Tail;
 			for (int i = 0; i < size - 1 - index; i++)Temp = Temp->pPrev;
 		}
-		Element* New = new Element(Data);
+	/*	Element* New = new Element(Data);
 		New->pNext = Temp;
 		New->pPrev = Temp->pPrev;
 		Temp->pPrev->pNext = New;
-		Temp->pPrev = New;
+		Temp->pPrev = New;*/
+		Temp->pPrev = Temp->pPrev->pNext = new Element(Data, Temp, Temp->pPrev);
 		size++;
 	}
 
@@ -441,9 +429,10 @@ public:
 	void erase(int index)
 	{
 		if (Head == nullptr || Tail == nullptr) return;
+		if (index == 0)return pop_front();
 
 		Element* Temp = Head;
-		for (int i = 0; i < index - 1; i++)
+		for (int i = 0; i < index; i++)
 		{
 			Temp = Temp->pNext;
 		}
@@ -461,7 +450,8 @@ public:
 
 };
 
-//#define BASE_CHECK
+ //#define BASE_CHECK
+#define RANGE_BASED_FOR_LIST
 
 void main()
 {
@@ -474,8 +464,8 @@ void main()
 	List list;
 	for (int i = 0; i < n; i++)
 	{
-		list.push_front(rand() % 100);
-		//list.push_back(rand() % 100);
+		//list.push_front(rand() % 100);
+		list.push_back(rand() % 100);
 	}
 	/*	list.print();
 		list.revers_print();
@@ -496,15 +486,17 @@ void main()
 	cin >> value;
 	list.insert(index, value);
 	list.print();
-	//list.revers_print();
-	cout << "Введите индекс удаляемого элемента:";
-	cin >> index;
-	list.erase(index);
-	list.print();
+	list.revers_print();
+	//cout << "Введите индекс удаляемого элемента:";
+	//cin >> index;
+	//list.erase(index);
+	//list.print();
 	//list.revers_print();
 
 #endif // BASE_CHECK
 
+#ifdef RANGE_BASED_FOR_LIST
+		
 	List list = { 3,5,8,13,21 };
 	list.print();
 	for (int i : list)
@@ -527,5 +519,7 @@ void main()
 		cout << *it << tab;
 	}
 	cout << endl;
+#endif // RANGE_BASED_FOR_LIST
+
 
 }
