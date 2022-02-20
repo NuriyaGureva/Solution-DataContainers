@@ -1,10 +1,18 @@
 ﻿// IteratorsInheritanceInList.cpp :
-
 #include <iostream>
+#include<iterator>
+using namespace std;
+#define tab "\t"
+using std::cin;
+using std::cout;
+using std::endl;
 
-int main()
+
+
+
+void main()
 {
-    std::cout << "Hello World!\n";
+	setlocale(LC_ALL, "");
 }
 
 
