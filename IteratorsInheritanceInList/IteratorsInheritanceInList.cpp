@@ -1,31 +1,39 @@
 ﻿#include<iostream>
 #include<iterator>
+#include<string>
 using namespace std;
 #define tab "\t"
 using std::cin;
 using std::cout;
 using std::endl;
 
-
+template<typename T>
 class List
 {
 	class Element
 	{
-		int Data;
+	    T Data;
 		Element* pNext;
 		Element* pPrev;
 
 	public:
-		Element(int Data, Element* pNext = nullptr, Element* pPrev = nullptr) :
+		Element(T Data, Element* pNext = nullptr, Element* pPrev = nullptr) :
 			Data(Data), pNext(pNext), pPrev(pPrev)
 		{
+#ifdef DEBUG
 			cout << "EConstructor:\t" << this << endl;
+#endif // DEBUG
+
 		}
-		~Element()
+
+		~Element()		
 		{
+#ifdef DEBUG
 			cout << " EDestructor:\t" << this << endl;
+#endif // DEBUG
+
 		}
-		friend class List;
+		friend class List<T>;
 	}*Head, * Tail;
 	size_t size;//size_t-unsigned int
 
@@ -35,17 +43,20 @@ class List
 	protected:
 		Element* Temp;
 	public:
-
-		//BaseIterator(){}
+	
 		BaseIterator(Element* Temp=nullptr) :Temp(Temp)
 
 		{
+#ifdef  DEBUG
 			cout << "BitConstructor:\t" << this << endl;
-
-		}
+#endif //  DEBUG
+	    }
 		~BaseIterator()
 		{
+#ifdef DEBUG
 			cout << " BitDestructor:\t" << this << endl;
+#endif // DEBUG
+
 		}
 		virtual BaseIterator& operator ++() = 0;		
 		virtual BaseIterator& operator --() = 0;
@@ -59,7 +70,7 @@ class List
 			return this->Temp != other.Temp;
 		}
 
-		const int& operator*()const
+		const T& operator*()const
 		{
 			return Temp->Data;
 		}
@@ -77,33 +88,39 @@ public:
 
 		ConstIterator(Element* Temp = nullptr) :BaseIterator(Temp)
 		{
+#ifdef DEBUG
 			cout << "CItConstructor:\t" << this << endl;
+#endif // DEBUG
+
 		}
 		~ConstIterator()
 		{
+#ifdef DEBUG
 			cout << "CItDeconstructor:\t" << this << endl;
+#endif // DEBUG
+
 		}
 		ConstIterator& operator++()
 		{
-			Temp = Temp->pNext;
+			BaseIterator::Temp = BaseIterator:: Temp->pNext;
 
 			return *this;
 		}
 		ConstIterator operator++(int)
 		{
 			ConstIterator old = *this;
-			Temp = Temp->pNext;
+			BaseIterator::Temp = BaseIterator::Temp->pNext;
 			return old;
 		}
 		ConstIterator& operator--()
 		{
-			Temp = Temp->pPrev;
+			BaseIterator::Temp = BaseIterator::Temp->pPrev;
 			return *this;
 		}
 		ConstIterator operator--(int)
 		{
 			ConstIterator old = *this;
-			Temp = Temp->pPrev;
+			BaseIterator::Temp = BaseIterator::Temp->pPrev;
 			return old;
 		}
 	
@@ -114,39 +131,45 @@ public:
 
 		ConstReverseIterator(Element* Temp = nullptr) :BaseIterator(Temp)
 		{
+#ifdef DEBUG
 			cout << "CRltConstructor:\t" << this << endl;
+#endif // DEBUG
+
 		}
 		~ConstReverseIterator()
 		{
+#ifdef DEBUG
 			cout << "CRltDeconstructor:\t" << this << endl;
+#endif // DEBUG
+
 		}
 		ConstReverseIterator& operator++()
-		{
-			Temp = Temp->pPrev;
+		{	
+			BaseIterator::Temp = BaseIterator::Temp->pPrev;
 
 			return *this;
 		}
 		ConstReverseIterator operator++(int)
 		{
 			ConstReverseIterator old = *this;
-			Temp = Temp->pPrev;
+			BaseIterator::Temp = BaseIterator::Temp->pPrev;
 			return old;
 		}
 		ConstReverseIterator& operator--()
 		{
-			Temp = Temp->pNext;
+			BaseIterator::Temp = BaseIterator::Temp->pNext;
 			return *this;
 		}
 		ConstReverseIterator operator--(int)
 		{
 			ConstReverseIterator old = *this;
-			Temp = Temp->pNext;
+			BaseIterator::Temp = BaseIterator::Temp->pNext;
 			return old;
 		}
 
 		const int& operator*()const
 		{
-			return Temp->Data;
+			return BaseIterator:: Temp->Data;
 		}
 
 	};
@@ -156,15 +179,21 @@ public:
 	public:
 		ReverseIterator(Element* Temp = nullptr) :ConstReverseIterator(Temp)
 		{
+#ifdef DEBUG
 			cout << "RltConstructor:\t" << this << endl;
+#endif // DEBUG
+
 		}
 		~ReverseIterator()
 		{
+#ifdef DEBUG
 			cout << "RltDeconstructor:\t" << this << endl;
+#endif // DEBUG
+
 		}					
-		int& operator*()
+		T& operator*()
 		{
-			return Temp->Data;
+			return BaseIterator ::Temp->Data;
 		}
 	};
 
@@ -173,16 +202,22 @@ public:
 	public:
 		Iterator(Element* Temp = nullptr) :ConstIterator(Temp)
 		{
+#ifdef DEBUG
 			cout << "ItConstructor:\t" << this << endl;
+#endif // DEBUG
+
 		}
 		~Iterator()
 		{
+#ifdef DEBUG
 			cout << "ItDeconstructor:\t" << this << endl;
+#endif // DEBUG
+
 		}	
 	
-		int& operator*()
+		T& operator*()
 		{
-			return Temp->Data;
+			return BaseIterator::Temp->Data;
 		}		
 
 	};
@@ -224,7 +259,11 @@ public:
 	{
 		Head = Tail = nullptr;
 		size = 0;
+
+#ifdef DEBUG
 		cout << " LConsructor:\t" << this << endl;
+#endif // DEBUG
+
 	}
 	List(unsigned int size) :List()
 	{
@@ -234,10 +273,10 @@ public:
 			push_back(0);
 		}
 	}
-	List(const initializer_list<int>& il) :List()
+	List(const initializer_list<T>& il) :List()
 	{
 		cout << typeid(il.begin()).name() << endl;
-		for (int const* it = il.begin(); it != il.end(); ++it)
+		for (T const* it = il.begin(); it != il.end(); ++it)
 		{
 			push_back(*it);
 		}
@@ -247,7 +286,11 @@ public:
 	{
 		while (Head)pop_front();
 		while (Tail)pop_back();
+
+#ifdef DEBUG
 		cout << "LDestructor:\t" << this << endl;
+#endif // DEBUG
+
 	}
 
 		//          Methods:
@@ -263,7 +306,7 @@ public:
 		for (Element* Temp = Tail; Temp; Temp = Temp->pPrev)
 			cout << Temp->pPrev << tab << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
 	}
-	void push_front(int Data)
+	void push_front(T Data)
 	{
 		if (Head == nullptr && Tail == nullptr)
 		{
@@ -278,7 +321,7 @@ public:
 		Head = Head->pPrev = new Element(Data, Head);
 		size++;
 	}
-	void push_back(int Data)
+	void push_back(T Data)
 	{
 		/*	if (Tail == nullptr)return push_front(Data);
 			Element* Temp = Tail;
@@ -300,7 +343,7 @@ public:
 		size++;
 
 	}
-	void insert(int index, int Data)
+	void insert(int index, T Data)
 	{
 		/*	if (index == 0 || Head == nullptr) return push_front(Data);
 			if (index > size)return;
@@ -434,7 +477,7 @@ void main()
 
 #ifdef RANGE_BASED_FOR_LIST
 		
-	List list = { 3,5,8,13,21 };
+	List<int> list = { 3,5,8,13,21 };
 	list.print();
 	for (int i : list)
 	{
@@ -446,17 +489,32 @@ void main()
 		cout << *it << tab;
 	}
 	cout << endl;*/
-	for (List::ReverseIterator it = list.rbegin(); it; ++it)
+	//for (List<int>::ReverseIterator it = list.rbegin(); it; ++it)
+	//{
+	//	cout << *it << tab;
+	//}
+	//cout << endl;
+
+	for (List<int>::ConstReverseIterator it = list.crbegin(); it; ++it)
 	{
 		cout << *it << tab;
 	}
-	cout << endl;
-	for (List::ConstReverseIterator it = list.crbegin(); it; ++it)
-	{
-		cout << *it << tab;
-	}
-	cout << endl;
+	cout << endl;	
 #endif // RANGE_BASED_FOR_LIST
 
-
+	List<double> d_list = { 2.5,3.14,5.2,8.3 };
+	for (double i : d_list)cout << i << tab;
+	cout << endl;
+for(List<double>::ReverseIterator it=d_list.rbegin();it;++it)
+   {
+	cout << *it << tab;
+   }
+   cout << endl;
+   List<string>s_list = { "Have","a","nice","day" };
+   for (std::string i : s_list)cout << i << tab; cout << endl;
+   for (List<std::string>::ReverseIterator it = s_list.rbegin(); it != s_list.rend(); ++it)
+   {
+	   cout << *it << tab;
+   }
+   cout << endl;
 }
