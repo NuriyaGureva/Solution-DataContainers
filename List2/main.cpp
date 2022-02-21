@@ -87,47 +87,47 @@ public:
 	};
 
 
-	class ReversIterator
+	class ReverseIterator
 
 	{
 		Element* Temp;
 	public:
-		ReversIterator(Element* Temp = nullptr):Temp(Temp)
+		ReverseIterator(Element* Temp = nullptr):Temp(Temp)
 		{
 			cout << "RltConstructor:\t" << this << endl;
 		}
-		~ReversIterator()
+		~ReverseIterator()
 		{
 			cout << "RltDeconstructor:\t" << this << endl;
 		}
-		ReversIterator& operator++()
+		ReverseIterator& operator++()
 		{
 			Temp = Temp->pPrev;
 
 			return *this;
 		}
-		ReversIterator operator++(int)
+		ReverseIterator operator++(int)
 		{
-			ReversIterator old = *this;
+			ReverseIterator old = *this;
 			Temp = Temp->pPrev;
 			return old;
 		}
-		ReversIterator& operator--()
+		ReverseIterator& operator--()
 		{
 			Temp = Temp->pNext;
 			return *this;
 		}
-		ReversIterator operator--(int)
+		ReverseIterator operator--(int)
 		{
-			ReversIterator old = *this;
+			ReverseIterator old = *this;
 			Temp = Temp->pNext;
 			return old;
 		}
-		bool operator==(const ReversIterator& other)const
+		bool operator==(const ReverseIterator& other)const
 		{
 			return this->Temp == other.Temp;
 		}
-		bool operator!=(const ReversIterator& other)const
+		bool operator!=(const ReverseIterator& other)const
 		{
 			return this->Temp != other.Temp;
 		}
@@ -154,11 +154,11 @@ public:
 	{
 		return nullptr;
 	}
-	ReversIterator rbegin()
+	ReverseIterator rbegin()
 	{
 		return Tail;
 	}
-	ReversIterator rend()
+	ReverseIterator rend()
 	{
 		return nullptr;
 	}
@@ -394,7 +394,7 @@ void main()
 	}
 	cout << endl;
 
-	for (List::ReversIterator it = list.rbegin(); it; ++it)
+	for (List::ReverseIterator it = list.rbegin(); it; ++it)
 	{
 		cout << *it << tab;
 	}
