@@ -58,8 +58,8 @@ class List
 #endif // DEBUG
 
 		}
-		virtual BaseIterator& operator ++() = 0;		
-		virtual BaseIterator& operator --() = 0;
+	/*	virtual BaseIterator& operator ++() = 0;		
+		virtual BaseIterator& operator --() = 0;*/
 
 		bool operator==(const BaseIterator& other)const
 		{
@@ -222,214 +222,232 @@ public:
 
 	};
 
-	ConstIterator cbegin()const
-	{
-		return Head;
-	}
-	ConstIterator cend()const
-	{
-		return nullptr;
-	}
-	ReverseIterator rbegin()
-	{
-		return Tail;
-	}
-	ReverseIterator rend()
-	{
-		return nullptr;
-	}
-	ConstReverseIterator crbegin()const
-	{
-		return Tail;
-	}
-	ConstReverseIterator crend()const
-	{
-		return nullptr;
-	}
+	ConstIterator cbegin()const;
+	ConstIterator cend()const;	
+	ReverseIterator rbegin();
+	ReverseIterator rend();	
+	ConstReverseIterator crbegin()const;
+	ConstReverseIterator crend()const;
+	Iterator begin();	
+	Iterator end();
 
-	Iterator begin()
-	{
-		return Head;
-	}
-	Iterator end()
-	{
-		return nullptr;
-	}
-	List()
-	{
-		Head = Tail = nullptr;
-		size = 0;
+	List();
+	List(unsigned int size);
+	List(const initializer_list<T>& il);
+	~List();
 
-#ifdef DEBUG
-		cout << " LConsructor:\t" << this << endl;
-#endif // DEBUG
 
-	}
-	List(unsigned int size) :List()
-	{
-		for (int i = 0; i < size; i++)
-		{
-			push_front(0);
-			push_back(0);
-		}
-	}
-	List(const initializer_list<T>& il) :List()
-	{
-		cout << typeid(il.begin()).name() << endl;
-		for (T const* it = il.begin(); it != il.end(); ++it)
-		{
-			push_back(*it);
-		}
+			//  Methods:
 
-	}
-	~List()
-	{
-		while (Head)pop_front();
-		while (Tail)pop_back();
-
-#ifdef DEBUG
-		cout << "LDestructor:\t" << this << endl;
-#endif // DEBUG
-
-	}
-
-		//          Methods:
-	void print()const
-	{
-		cout << "Количество элементов списка: " << size << endl;
-		for (Element* Temp = Head; Temp; Temp = Temp->pNext)
-			cout << Temp->pPrev << tab << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
-	}
-	void revers_print()const
-	{
-		cout << "Количество элементов списка: " << size << endl;
-		for (Element* Temp = Tail; Temp; Temp = Temp->pPrev)
-			cout << Temp->pPrev << tab << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
-	}
-	void push_front(T Data)
-	{
-		if (Head == nullptr && Tail == nullptr)
-		{
-			Head = Tail = new Element(Data);
-			size++;
-			return;
-		}
-		//Element* New = new Element(Data);
-		//New->pNext = Head;
-		//Head->pPrev = New;
-		//Head = New;
-		Head = Head->pPrev = new Element(Data, Head);
-		size++;
-	}
-	void push_back(T Data)
-	{
-		/*	if (Tail == nullptr)return push_front(Data);
-			Element* Temp = Tail;
-			while (Temp->pNext)
-			Temp = Temp->pNext;
-			Temp->pNext = new Element(Data);
-			size++;*/
-		if (Head == nullptr && Tail == nullptr)
-		{
-			Head = Tail = new Element(Data);
-			size++;
-			return;
-		}
-	/*	Element* New = new Element(Data);
-		New->pPrev = Tail;
-		Tail->pNext = New;
-		Tail = New;*/
-		Tail = Tail->pNext = new Element(Data, nullptr, Tail);
-		size++;
-
-	}
-	void insert(int index, T Data)
-	{
-		/*	if (index == 0 || Head == nullptr) return push_front(Data);
-			if (index > size)return;
-			Element* Temp = Head;
-			for (int i = 0; i < index - 1; i++)
-			Temp = Temp->pNext;
-			Temp->pNext = new Element(Data, Temp->pNext);
-			size++;*/
-		Element* Temp;
-		if (index > size)return;
-		if (index == 0)return push_front(Data);
-		if (index == size)return push_back(Data);
-		if (index < size / 2)
-		{
-			Temp = Head;
-			for (int i = 0; i < index; i++)Temp = Temp->pNext;
-		}
-		else
-		{
-			Temp = Tail;
-			for (int i = 0; i < size - 1 - index; i++)Temp = Temp->pPrev;
-		}
-	/*	Element* New = new Element(Data);
-		New->pNext = Temp;
-		New->pPrev = Temp->pPrev;
-		Temp->pPrev->pNext = New;
-		Temp->pPrev = New;*/
-		Temp->pPrev = Temp->pPrev->pNext = new Element(Data, Temp, Temp->pPrev);
-		size++;
-	}
-
-	void pop_front()
-	{
-		if (Head == nullptr && Tail == nullptr)return;
-		if (Head == Tail)
-		{
-			delete Head;
-			Head = Tail = nullptr;
-			size--;
-			return;
-		}
-		Head = Head->pNext;
-		delete Head->pPrev;
-		Head->pPrev = nullptr;
-		size--;
-	}
-	void pop_back()
-	{
-		/*if (Tail == nullptr)return;
-		Element* Temp = Tail;
-		while (Temp->pNext->pNext)Temp = Temp->pNext;
-		delete Temp->pNext;
-		Temp->pNext = nullptr;
-		size--;*/
-
-		if (Head == Tail)return pop_front();
-		Tail = Tail->pPrev;
-		delete Tail->pNext;
-		Tail->pNext = nullptr;
-		Head = nullptr;
-		size--;
-	}
-	void erase(int index)
-	{
-		if (Head == nullptr || Tail == nullptr) return;
-		if (index == 0)return pop_front();
-
-		Element* Temp = Head;
-		for (int i = 0; i < index; i++)
-		{
-			Temp = Temp->pNext;
-		}
-
-		Element* Prev = Temp->pPrev;
-		Element* Next = Temp->pNext;
-
-		Prev->pNext = Next;
-		Next->pPrev = Prev;
-
-		delete Temp;
-		Temp = nullptr;
-		size--;
-	}
-
+		void print()const;
+		void revers_print()const;	
+		void push_front(T Data);	
+		void push_back(T Data);	
+		void insert(int index, T Data);
+		void pop_front();	
+		void pop_back();	
+		void erase(int index);	
+	
 };
 
+
+
+
+
+template<typename T>
+ typename List<T>::ConstIterator List<T>:: cbegin()const
+{
+	return Head;
+}
+template<typename T>
+typename List<T>::ConstIterator List<T>::cend()const
+{
+	return nullptr;
+}
+template<typename T>
+typename List<T>::ReverseIterator List<T>::rbegin()
+{
+	return Tail;
+}
+template<typename T>
+typename List<T>::ReverseIterator List<T>::rend()
+{
+	return nullptr;
+}
+template<typename T>
+typename List<T>::ConstReverseIterator List<T>::crbegin()const
+{
+	return Tail;
+}
+template<typename T>
+typename List<T>::ConstReverseIterator List<T>::crend()const
+{
+	return nullptr;
+}
+template<typename T>
+typename List<T>::Iterator List<T>::begin()
+{
+	return Head;
+}
+template<typename T>
+typename List<T>::Iterator List<T>::end()
+{
+	return nullptr;
+}
+
+template<typename T>List<T>::List()
+{
+	Head = Tail = nullptr;
+	size = 0;
+
+#ifdef DEBUG
+	cout << " LConsructor:\t" << this << endl;
+#endif // DEBUG
+
+}
+template<typename T>List<T>::List(unsigned int size) :List()
+{
+	for (int i = 0; i < size; i++)
+	{
+		push_front(0);
+		push_back(0);
+	}
+}
+template<typename T>List<T>::List(const initializer_list<T>& il) :List()
+{
+	cout << typeid(il.begin()).name() << endl;
+	for (T const* it = il.begin(); it != il.end(); ++it)
+	{
+		push_back(*it);
+	}
+
+}
+template<typename T>List<T>::~List()
+{
+	while (Head)pop_front();
+	while (Tail)pop_back();
+
+#ifdef DEBUG
+	cout << "LDestructor:\t" << this << endl;
+#endif // DEBUG
+
+}
+
+//          Methods:
+template<typename T>
+  void List<T>::print()const
+{
+	cout << "Количество элементов списка: " << size << endl;
+	for (Element* Temp = Head; Temp; Temp = Temp->pNext)
+		cout << Temp->pPrev << tab << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
+}
+  template<typename T>
+void List<T>::revers_print()const
+{
+	cout << "Количество элементов списка: " << size << endl;
+	for (Element* Temp = Tail; Temp; Temp = Temp->pPrev)
+		cout << Temp->pPrev << tab << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
+}
+template<typename T>
+void List<T>::push_front(T Data)
+{
+	if (Head == nullptr && Tail == nullptr)
+	{
+		Head = Tail = new Element(Data);
+		size++;
+		return;
+	}
+
+	Head = Head->pPrev = new Element(Data, Head);
+	size++;
+}
+template<typename T>
+void List<T>::push_back(T Data)
+{
+
+	if (Head == nullptr && Tail == nullptr)
+	{
+		Head = Tail = new Element(Data);
+		size++;
+		return;
+	}
+	
+	Tail = Tail->pNext = new Element(Data, nullptr, Tail);
+	size++;
+
+}
+template<typename T>
+void List<T>::insert(int index, T Data)
+{
+	
+	Element* Temp;
+	if (index > size)return;
+	if (index == 0)return push_front(Data);
+	if (index == size)return push_back(Data);
+	if (index < size / 2)
+	{
+		Temp = Head;
+		for (int i = 0; i < index; i++)Temp = Temp->pNext;
+	}
+	else
+	{
+		Temp = Tail;
+		for (int i = 0; i < size - 1 - index; i++)Temp = Temp->pPrev;
+	}
+	
+	Temp->pPrev = Temp->pPrev->pNext = new Element(Data, Temp, Temp->pPrev);
+	size++;
+}
+template<typename T>
+void List<T>::pop_front()
+{
+	if (Head == nullptr && Tail == nullptr)return;
+	if (Head == Tail)
+	{
+		delete Head;
+		Head = Tail = nullptr;
+		size--;
+		return;
+	}
+	Head = Head->pNext;
+	delete Head->pPrev;
+	Head->pPrev = nullptr;
+	size--;
+}
+template<typename T>
+void List<T>::pop_back()
+{
+
+
+	if (Head == Tail)return pop_front();
+	Tail = Tail->pPrev;
+	delete Tail->pNext;
+	Tail->pNext = nullptr;
+	Head = nullptr;
+	size--;
+}
+template<typename T>
+void List<T>::erase(int index)
+{
+	if (Head == nullptr || Tail == nullptr) return;
+	if (index == 0)return pop_front();
+
+	Element* Temp = Head;
+	for (int i = 0; i < index; i++)
+	{
+		Temp = Temp->pNext;
+	}
+
+	Element* Prev = Temp->pPrev;
+	Element* Next = Temp->pNext;
+
+	Prev->pNext = Next;
+	Next->pPrev = Prev;
+
+	delete Temp;
+	Temp = nullptr;
+	size--;
+}
  //#define BASE_CHECK
 #define RANGE_BASED_FOR_LIST
 
@@ -479,11 +497,13 @@ void main()
 		
 	List<int> list = { 3,5,8,13,21 };
 	list.print();
+	cout << endl;
 	for (int i : list)
 	{
 		cout << i << tab;
 	}
 	cout << endl;
+
 	/*for (List::ConstIterator it = list.cbegin(); it != list.cend(); ++it)
 	{
 		cout << *it << tab;
