@@ -509,8 +509,7 @@ void List<T>::erase(int index)
 	delete Temp;
 	Temp = nullptr;
 	size--;
-}
-//#define BASE_CHECK
+//define BASE_CHECK
 #define RANGE_BASED_FOR_LIST
 
 void main()
