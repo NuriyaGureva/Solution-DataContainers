@@ -438,6 +438,8 @@ void List<T>::push_back(T Data)
 	size++;
 
 }
+
+
 template<typename T>
 void List<T>::insert(int index, T Data)
 {
