@@ -2,9 +2,9 @@
 using namespace std;
 
 class Tree
-{
+{	
 	class Element
-	{
+	{		
 		int Data;
 		Element* pLeft;
 		Element* pRight;
@@ -16,9 +16,12 @@ class Tree
 		~Element()
 		{
 			cout << "EDecstructor:\t" << this << endl;
+			delete pLeft;
+			delete pRight;				
 		}
 		friend class Tree;
 	}*Root;
+	int count=0;
 public:
 	
 	Element* getRoot()
@@ -28,14 +31,37 @@ public:
 public:
 	Tree()
 	{
+		count++;
 		this->Root = nullptr;
 		cout << "TConstructor:\t" << this << endl;
 	}
+
+	Tree(Tree&& other)noexcept
+	{
+		count++;
+		this->Root = other.Root;
+		other.Root = nullptr;
+		cout << "MoveConstructor:\t" << this << endl;
+	}
+	Tree(const Tree& other) 
+	{
+		count++;		
+		this->Root = other.Root;		
+		cout << "CopyConstructor:\t" << this << endl;
+	}
 	~Tree()
 	{
-		cout << "TDestructor:\t" << this << endl;
+		cout << "TDestructor:\t" << this << endl;		
+	    delete Root;
+		count--;
 	}
 
+	Tree& operator=(Tree& other)
+	{
+		this->Root = other.Root;		
+		return *this;
+		count--;
+	}
 	void insert(int Data)
 	{
 		insert(Data, Root);
@@ -96,15 +122,15 @@ private:
 	int minValue(Element* Root)const
 	{
 		if (Root == nullptr)return 0;
-		/*if (Root->pLeft == nullptr)
+	/*	if (Root->pLeft == nullptr)
 		{
 			return Root->Data;
 		}
 		else
 		{
 			return minValue(Root->pLeft);
-		}*/
-		//return Root->pLeft == nullptr ? Root->Data : minValue(Root->pLeft);
+		}
+		return Root->pLeft == nullptr ? Root->Data : minValue(Root->pLeft);*/
 		return Root->pLeft ? minValue(Root->pLeft):Root->Data;
     }
 	int maxValue(Element* Root)const
@@ -122,22 +148,23 @@ private:
 	}
 	int size(Element* Root)const
 	{
-		if (Root == nullptr)return 0;
-		return size(Root->pLeft) + size(Root->pRight)+1;
+		//if (Root == nullptr)return 0;
+		//return size(Root->pLeft) + size(Root->pRight)+1;
+		return Root == nullptr ?0 : size(Root->pLeft) + size(Root->pRight) + 1;
 	}
 	int sum(Element* Root)const
 	{
-		if (Root ==nullptr)return 0;		
-		return Root->Data + sum(Root->pLeft) +sum(Root->pRight);
-
+		//if (Root ==nullptr)return 0;		
+		//return Root->Data + sum(Root->pLeft) +sum(Root->pRight);
+		return Root==nullptr ?0 : Root->Data + sum(Root->pLeft) + sum(Root->pRight);
 	}
 	double avg(Element*Root)
 	{
-		if (Root == nullptr)return 0;		
-	   int sum = Root->Data +avg(Root->pLeft) + avg(Root->pRight);
-	   if (Root->pLeft && Root->pRight)return sum / 3;
-	   if (!Root->pLeft && !Root->pRight)return sum;
-	   else return sum/2 ;
+		if (Root == nullptr)return 0;	   
+		int sum = Root->Data + avg(Root->pLeft) + avg(Root->pRight) ;
+		if (!Root->pLeft && !Root->pRight)return sum;
+		if (Root->pLeft && Root->pRight)return sum/3;
+	   return sum/2; 		
 	}
 
 };
